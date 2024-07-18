@@ -10,10 +10,9 @@ export const appwriteConfig = {
   savesCollectionId: import.meta.env.VITE_APPWRITE_SAVES_COLLECTION_ID,
 }
 
-export const client = new Client();
-
-client.setEndpoint(appwriteConfig.url);
-client.setProject(appwriteConfig.projectId);
+export const client = new Client()
+  .setEndpoint(appwriteConfig.url)
+  .setProject(appwriteConfig.projectId);
 
 export const account = new Account(client);
 export const databases = new Databases(client);

@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { Button } from '../ui/button'
-import { useSignOutAccount } from '@/lib/react-query/queriesMutations'
-import { useUserContext } from '@/context/AuthContext'
-import { signOutAccount } from '@/lib/appwrite/api'
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Button } from "../ui/button";
+import { useSignOutAccount } from "@/lib/react-query/queriesMutations";
+import { useUserContext } from "@/context/AuthContext";
 
 const Topbar = () => {
   const navigate = useNavigate();
@@ -56,7 +55,7 @@ const Topbar = () => {
         </div>
       </div>
     </section>
-  )
+  );
 }
 
-export default Topbar
+export default Topbar;
