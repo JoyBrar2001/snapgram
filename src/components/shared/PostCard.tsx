@@ -50,7 +50,7 @@ const PostCard = ({ post }: { post: Models.Document }) => {
         </Link>
       </div>
 
-      <Link to={`/posts/${post.$id}`}>
+      <Link to={`/post/${post.$id}`}>
         <div className="small-medium lg:base-medium py-5">
           <p>{post.caption}</p>
           <ul className="flex gap-1 mt-2">
