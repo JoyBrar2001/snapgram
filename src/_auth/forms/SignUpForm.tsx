@@ -9,9 +9,8 @@ import { Input } from "@/components/ui/input";
 import Loader from "@/components/shared/Loader";
 import { useToast } from "@/components/ui/use-toast";
 
-import { SignupValidation } from "@/lib/validations";
-import { createUserAccount } from "@/lib/appwrite/api";
 import { useCreateUserAccount, useSignInAccount } from "@/lib/react-query/queriesMutations";
+import { SignupValidation } from "@/lib/validations";
 import { useUserContext } from "@/context/AuthContext";
 
 const SignUpForm = () => {
@@ -148,7 +147,7 @@ const SignUpForm = () => {
           />
 
           <Button type="submit" className="shad-button_primary">
-            {isCreatingAccount ? (
+            {isCreatingAccount || isSigningIn || isUserLoading ? (
               <div className="flex-center gap-2">
                 <Loader /> Loading...
               </div>

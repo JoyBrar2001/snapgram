@@ -12,7 +12,6 @@ import { useToast } from "@/components/ui/use-toast";
 import { SigninValidation } from "@/lib/validations";
 import { useSignInAccount } from "@/lib/react-query/queriesMutations";
 import { useUserContext } from "@/context/AuthContext";
-import { account } from "@/lib/appwrite/config";
 
 const SignInForm = () => {
   const { toast } = useToast();
