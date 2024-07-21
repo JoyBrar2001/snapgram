@@ -14,9 +14,6 @@ const LikedPosts = () => {
     );
   }
 
-  console.log(currentUser.liked);
-
-
   return (
     <>
       {currentUser.liked.length === 0 && (

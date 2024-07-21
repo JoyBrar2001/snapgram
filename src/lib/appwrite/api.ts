@@ -433,3 +433,29 @@ export async function searchPosts(searchTerm: string) {
     console.log(error);
   }
 }
+
+export async function getSavedPosts(userId: string) {
+  try {
+    const savedRecords = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.savesCollectionId,
+      [Query.equal('user', userId)],
+    );
+
+    if (!savedRecords) throw Error;
+
+    const postIds = savedRecords.documents.map(record => record.post.$id);
+
+    const savedPostsPromises = postIds.map(postId => databases.getDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.postCollectionId,
+      postId
+    ));
+
+    const savedPosts = await Promise.all(savedPostsPromises);
+
+    return savedPosts;
+  } catch (error) {
+    console.log(error);
+  }
+}

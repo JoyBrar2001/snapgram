@@ -11,8 +11,6 @@ const PostDetail = () => {
   const { data: post, isPending } = useGetPostById(id || '');
   const { user } = useUserContext();
 
-
-
   return (
     <div className="post_details-container">
       {isPending ? (
