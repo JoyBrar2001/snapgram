@@ -3,7 +3,6 @@ import Loader from '@/components/shared/Loader';
 import { Button } from '@/components/ui/button';
 import { useUserContext } from '@/context/AuthContext';
 import { useGetUserByID } from '@/lib/react-query/queriesMutations';
-import React from 'react'
 import { Link, Outlet, Route, Routes, useLocation, useParams } from 'react-router-dom'
 import LikedPosts from './LikedPosts';
 
