@@ -418,7 +418,7 @@ export async function getPostById(postId: string) {
   }
 }
 
-export async function getInfinitePosts({ pageParam }: { pageParam: number }) {
+export async function getInfinitePosts(pageParam? : number) {
   const queries: any[] = [Query.orderDesc("$updatedAt"), Query.limit(9)];
 
   if (pageParam) {

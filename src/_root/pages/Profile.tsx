@@ -5,24 +5,14 @@ import { useUserContext } from '@/context/AuthContext';
 import { useGetUserByID } from '@/lib/react-query/queriesMutations';
 import { Link, Outlet, Route, Routes, useLocation, useParams } from 'react-router-dom'
 import LikedPosts from './LikedPosts';
-
-interface StabBlockProps {
-  value: string | number;
-  label: string;
-}
-
-const StatBlock = ({ value, label }: StabBlockProps) => (
-  <div className="flex-center gap-2">
-    <p className="small-semibold lg:body-bold text-primary-500">{value}</p>
-    <p className="small-medium lg:base-medium text-light-2">{label}</p>
-  </div>
-);
+import Followers from './Followers';
+import Following from './Following';
+import { UserRoundCheck, UserRoundPlus } from 'lucide-react';
 
 const Profile = () => {
   const { id } = useParams();
   const { user } = useUserContext();
-  console.log(user);
-  
+
   const { pathname } = useLocation();
 
   const { data: currentUser } = useGetUserByID(id || "");
@@ -57,9 +47,20 @@ const Profile = () => {
             </div>
 
             <div className="flex gap-8 mt-10 items-center justify-center xl:justify-start flex-wrap z-20">
-              <StatBlock value={currentUser.posts.length} label="Posts" />
-              <StatBlock value={20} label="Followers" />
-              <StatBlock value={20} label="Following" />
+              <Link  to={`/profile/${id}`} className="flex-center gap-2">
+                <p className="small-semibold lg:body-bold text-primary-500">{currentUser.posts.length}</p>
+                <p className="small-medium lg:base-medium text-light-2">Posts</p>
+              </Link>
+
+              <Link to={`/profile/${id}/followers`} className="flex-center gap-2">
+                <p className="small-semibold lg:body-bold text-primary-500">20</p>
+                <p className="small-medium lg:base-medium text-light-2">Followers</p>
+              </Link>
+
+              <Link to={`/profile/${id}/following`} className="flex-center gap-2">
+                <p className="small-semibold lg:body-bold text-primary-500">20</p>
+                <p className="small-medium lg:base-medium text-light-2">Following</p>
+              </Link>
             </div>
 
             <p className="small-medium md:base-medium text-center xl:text-left mt-7 max-w-screen-sm">
@@ -111,7 +112,7 @@ const Profile = () => {
           </Link>
           <Link
             to={`/profile/${id}/liked-posts`}
-            className={`profile-tab rounded-r-lg ${pathname === `/profile/${id}/liked-posts` && "!bg-dark-3"
+            className={`profile-tab ${pathname === `/profile/${id}/liked-posts` && "!bg-dark-3"
               }`}>
             <img
               src={"/assets/icons/like.svg"}
@@ -120,6 +121,27 @@ const Profile = () => {
               height={20}
             />
             Liked Posts
+          </Link>
+          <Link
+            to={`/profile/${id}/followers`}
+            className={`profile-tab ${pathname === `/profile/${id}/followers` && "!bg-dark-3"
+              }`}>
+            
+            <UserRoundPlus
+              size={20}
+              className="text-primary-500"
+            />
+            Followers
+          </Link>
+          <Link
+            to={`/profile/${id}/following`}
+            className={`profile-tab rounded-r-lg ${pathname === `/profile/${id}/following` && "!bg-dark-3"
+              }`}>
+            <UserRoundCheck 
+              size={20}
+              className="text-primary-500"
+            />
+            Following
           </Link>
         </div>
       )}
@@ -135,6 +157,14 @@ const Profile = () => {
             element={<LikedPosts />}
           />
         )}
+        <Route
+          path="/followers"
+          element={<Followers />}
+        />
+        <Route
+          path="/following"
+          element={<Following />}
+        />
       </Routes>
       <Outlet />
     </div>

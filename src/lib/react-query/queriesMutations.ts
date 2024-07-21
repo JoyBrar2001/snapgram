@@ -198,7 +198,8 @@ export const useDeletePost = () => {
 export const useGetPosts = () => {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
-    queryFn: () => getInfinitePosts,
+    queryFn: () => getInfinitePosts(),
+    enabled: true,
   });
 };
 
