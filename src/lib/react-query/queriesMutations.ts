@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient, QueryClient } from "@tanstack/react-query";
 import { INewPost, INewUser, IUpdatePost, IUpdateUser } from "@/types";
-import { createPost, createUserAccount, deletePost, deleteSavedPost, followUser, getAllUsers, getCurrentUser, getFollowingList, getInfinitePosts, getPostById, getRecentPosts, getSavedPosts, getUserById, likePost, savePost, searchPosts, signInAccount, signOutAccount, unFollowUser, updatePost, updateUser } from "../appwrite/api";
+import { createPost, createUserAccount, deletePost, deleteSavedPost, followUser, getAllUsers, getCurrentUser, getFollowersList, getFollowingList, getInfinitePosts, getPostById, getRecentPosts, getSavedPosts, getUserById, likePost, savePost, searchPosts, signInAccount, signOutAccount, unFollowUser, updatePost, updateUser } from "../appwrite/api";
 import { QUERY_KEYS } from "./queryKeys";
 
 export const useCreateUserAccount = () => {
@@ -163,7 +163,7 @@ export const useFollowUser = (followerId: string, followingId: string) => {
         queryKey: [QUERY_KEYS.GET_USERS],
       });
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.CHECK_FOLLOWING_STATUS],
+        queryKey: [QUERY_KEYS.GET_FOLLOWING_USERS],
       });
     }
   });
@@ -179,7 +179,7 @@ export const useUnfollowUser = (followerId: string, followingId: string) => {
         queryKey: [QUERY_KEYS.GET_USERS],
       });
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.CHECK_FOLLOWING_STATUS],
+        queryKey: [QUERY_KEYS.GET_FOLLOWING_USERS],
       });
     }
   });
@@ -189,6 +189,13 @@ export const useFollowingUsers = (userId: string) => {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_FOLLOWING_USERS, userId],
     queryFn: () => getFollowingList(userId),
+  });
+};
+
+export const useFollowersUsers = (userId: string) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_FOLLOWER_USERS, userId],
+    queryFn: () => getFollowersList(userId),
   });
 };
 

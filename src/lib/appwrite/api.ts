@@ -238,6 +238,22 @@ export async function getFollowingList(userId: string) {
   }
 }
 
+export async function getFollowersList(userId: string) {
+  try {
+    const followingUsers = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.followCollectionId,
+      [Query.equal('FollowingId', userId)]
+    );
+
+    const followerIds = followingUsers.documents.map(doc => doc.FollowerId);
+
+    return followerIds;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export async function createPost(post: INewPost) {
   try {
     const uploadedFile = await uploadFile(post.file[0]);

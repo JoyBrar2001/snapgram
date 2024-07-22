@@ -1,16 +1,16 @@
-import { Models } from 'appwrite';
-import { Link } from 'react-router-dom';
-import { Button } from '../ui/button';
-import { useUserContext } from '@/context/AuthContext';
-import { useFollowingUsers, useFollowUser, useUnfollowUser } from '@/lib/react-query/queriesMutations';
+import { useFollowingUsers, useFollowUser, useGetUserByID, useUnfollowUser } from '@/lib/react-query/queriesMutations'
+import { useEffect, useState } from 'react'
 import Loader from './Loader';
-import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useUserContext } from '@/context/AuthContext';
+import { Button } from '../ui/button';
 
-const UserCard = ({ user }: { user: Models.Document }) => {
+const FollowerCard = ({ followerId }: { followerId: string }) => {
   const { user: currentUser } = useUserContext();
+  const { data: userData, isLoading: isUserLoading } = useGetUserByID(followerId);
 
-  const followUserMutation = useFollowUser(currentUser.id, user.$id);
-  const unfollowUserMutation = useUnfollowUser(currentUser.id, user.$id);
+  const followUserMutation = useFollowUser(currentUser.id, userData?.$id || "");
+  const unfollowUserMutation = useUnfollowUser(currentUser.id, userData?.$id || "");
 
   const { data: followingUsers, isLoading } = useFollowingUsers(currentUser.id);
 
@@ -18,9 +18,9 @@ const UserCard = ({ user }: { user: Models.Document }) => {
 
   useEffect(() => {
     if (followingUsers) {
-      setIsFollowing(followingUsers.includes(user.$id));
+      setIsFollowing(followingUsers.includes(userData?.$id || ""));
     }
-  }, [followingUsers, user.$id]);
+  }, [followingUsers, userData?.$id || ""]);
 
   const handleFollow = () => {
     if (isFollowing) {
@@ -38,7 +38,7 @@ const UserCard = ({ user }: { user: Models.Document }) => {
     }
   };
 
-  if (isLoading) {
+  if(!userData || isUserLoading){
     return (
       <div className="user-card">
         <Loader />
@@ -48,24 +48,24 @@ const UserCard = ({ user }: { user: Models.Document }) => {
 
   return (
     <div className="user-card">
-      <Link to={`/profile/${user.$id}`} className="flex-center flex-col gap-4">
+      <Link to={`/profile/${userData.$id}`} className="flex-center flex-col gap-4">
         <img
-          src={user.imageUrl || "/assets/icons/profile-placeholder.svg"}
+          src={userData.imageUrl || "/assets/icons/profile-placeholder.svg"}
           alt="creator"
           className="rounded-full w-14 h-14"
         />
 
         <div className="flex-center flex-col gap-1">
           <p className="base-medium text-light-1 text-center line-clamp-1">
-            {user.name}
+            {userData.name}
           </p>
           <p className="small-regular text-light-3 text-center line-clamp-1">
-            @{user.username}
+            @{userData.username}
           </p>
         </div>
       </Link>
 
-      {currentUser.id !== user.$id && (
+      {currentUser.id !== userData.$id && (
         <Button
           type="button"
           size="sm"
@@ -80,7 +80,7 @@ const UserCard = ({ user }: { user: Models.Document }) => {
         </Button>
       )}
     </div>
-  );
+  )
 }
 
-export default UserCard;
+export default FollowerCard
