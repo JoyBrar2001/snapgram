@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { useSignOutAccount } from "@/lib/react-query/queriesMutations";
 import { useUserContext } from "@/context/AuthContext";
+import CustomAlertDialog from "./CustomAlertDialog";
 
 const Topbar = () => {
   const navigate = useNavigate();
@@ -31,16 +32,17 @@ const Topbar = () => {
         </Link>
 
         <div className="flex gap-4">
-          <Button
-            variant="ghost"
-            className="shad-button_ghost"
-            onClick={() => signOut()}
+          <CustomAlertDialog
+            title="Logout?"
+            description="Are you sure you want to logout?"
+            onConfirm={() => signOut()}
+            confirmLabel="Logout"
+            cancelLabel="Cancel"
           >
-            <img
-              src="/assets/icons/logout.svg"
-              alt="logout"
-            />
-          </Button>
+            <Button variant="ghost" className="shad-button_ghost">
+              <img src="/assets/icons/logout.svg" alt="logout" />
+            </Button>
+          </CustomAlertDialog>
 
           <Link
             to={`/profile/${user.id}`}

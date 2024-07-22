@@ -31,6 +31,9 @@ export const useCreatePost = () => {
     mutationFn: (post: INewPost) => createPost(post),
     onSuccess: () => {
       queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_POSTS],
+      });
+      queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
       });
     },
@@ -234,6 +237,9 @@ export const useDeletePost = () => {
   return useMutation({
     mutationFn: ({ postId, imageId }: { postId: string, imageId: string }) => deletePost(postId, imageId),
     onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_POSTS],
+      });
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
       });

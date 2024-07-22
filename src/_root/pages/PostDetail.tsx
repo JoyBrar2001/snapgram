@@ -1,3 +1,4 @@
+import CustomAlertDialog from "@/components/shared/CustomAlertDialog";
 import Loader from "@/components/shared/Loader";
 import PostStats from "@/components/shared/PostStats";
 import { Button } from "@/components/ui/button";
@@ -74,18 +75,25 @@ const PostDetail = () => {
                   />
                 </Link>
 
-                <Button
-                  onClick={handleDeletePost}
-                  variant="ghost"
-                  className={`ghost_details-delete_btn ${user.id !== post?.creator.$id && "hidden"}`}
+                <CustomAlertDialog
+                  title="Delete Post ?"
+                  description="Are you sure you want to delete this post ?"
+                  onConfirm={handleDeletePost}
+                  confirmLabel="Delete"
+                  cancelLabel="Cancel"
                 >
-                  <img
-                    src="/assets/icons/delete.svg"
-                    alt="delete"
-                    width={24}
-                    height={24}
-                  />
-                </Button>
+                  <Button
+                    variant="ghost"
+                    className={`post_details-delete_btn ml-4 ${user.id !== post?.creator.$id && "hidden"}`}
+                  >
+                    <img
+                      src="/assets/icons/delete.svg"
+                      alt="delete"
+                      width={24}
+                      height={24}
+                    />
+                  </Button>
+                </CustomAlertDialog>
               </div>
             </div>
 

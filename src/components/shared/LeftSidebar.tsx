@@ -5,6 +5,7 @@ import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { sidebarLinks } from "@/constants";
 import { INavLink } from "@/types";
 import { Button } from "../ui/button";
+import CustomAlertDialog from "./CustomAlertDialog";
 
 const LeftSidebar = () => {
   const navigate = useNavigate();
@@ -79,19 +80,19 @@ const LeftSidebar = () => {
         </ul>
       </div>
 
-      <Button
-        variant="ghost"
-        className="shad-button_ghost"
-        onClick={() => signOut()}
+
+      <CustomAlertDialog
+        title="Logout?"
+        description="Are you sure you want to logout?"
+        onConfirm={() => signOut()}
+        confirmLabel="Logout"
+        cancelLabel="Cancel"
       >
-        <img
-          src="/assets/icons/logout.svg"
-          alt="logout"
-        />
-        <p className="small-medium lg:base-medium">
-          Logout
-        </p>
-      </Button>
+        <Button variant="ghost" className="shad-button_ghost">
+          <img src="/assets/icons/logout.svg" alt="logout" />
+          <p className="small-medium lg:base-medium">Logout</p>
+        </Button>
+      </CustomAlertDialog>
     </nav>
   );
 }
