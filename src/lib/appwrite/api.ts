@@ -147,8 +147,8 @@ export async function updateUser(user: IUpdateUser) {
 
 export async function getAllUsers(limit?: number) {
   const queries: any[] = [Query.orderDesc("$createdAt")];
-  
-  if(limit){
+
+  if (limit) {
     queries.push(Query.limit(limit))
   }
 
@@ -159,7 +159,7 @@ export async function getAllUsers(limit?: number) {
       queries,
     );
 
-    if(!users) throw Error;
+    if (!users) throw Error;
 
     return users;
   } catch (error) {
@@ -172,6 +172,67 @@ export async function signOutAccount() {
     const session = await account.deleteSession("current");
 
     return session;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function followUser(followerId: string, followedId: string) {
+  try {
+    const followRecord = await databases.createDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.followCollectionId,
+      ID.unique(),
+      {
+        FollowerId: followerId,
+        FollowingId: followedId,
+      }
+    );
+
+    return followRecord;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function unFollowUser(followerId: string, followingId: string) {
+  try {
+    const followRecords = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.followCollectionId,
+      [
+        Query.equal('FollowerId', followerId),
+        Query.equal('FollowingId', followingId)
+      ]
+    );
+
+    if (followRecords.documents.length > 0) {
+      const followRecordId = followRecords.documents[0].$id;
+
+      await databases.deleteDocument(
+        appwriteConfig.databaseId,
+        appwriteConfig.followCollectionId,
+        followRecordId
+      );
+    }
+
+    return followRecords;
+  } catch (error) {
+    console.log('Error unfollowing user:', error);
+  }
+}
+
+export async function getFollowingList(userId: string) {
+  try {
+    const followingUsers = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.followCollectionId,
+      [Query.equal('FollowerId', userId)]
+    );
+
+    const followingIds = followingUsers.documents.map(doc => doc.FollowingId);
+
+    return followingIds;
   } catch (error) {
     console.log(error);
   }
@@ -418,7 +479,7 @@ export async function getPostById(postId: string) {
   }
 }
 
-export async function getInfinitePosts(pageParam? : number) {
+export async function getInfinitePosts(pageParam?: number) {
   const queries: any[] = [Query.orderDesc("$updatedAt"), Query.limit(9)];
 
   if (pageParam) {
