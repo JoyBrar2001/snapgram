@@ -429,27 +429,36 @@ export async function getRecentPosts() {
 }
 
 export async function getFilteredPosts(filter: string, userId: string) {
-  let queries: any[] = [];
+  let filteredPosts;
+  let queries = [];
   try {
-
     if (filter === "All") {
-      queries = [];
+      filteredPosts = await databases.listDocuments(
+        appwriteConfig.databaseId,
+        appwriteConfig.postCollectionId,
+      );
+
     } else if (filter === "Following") {
-      const followingUsers = await getFollowingList(userId);
-
-      if (followingUsers && followingUsers.length > 0) {
-        queries = followingUsers.map((user) => Query.equal('userId', user));
+      
+      const followingUsersIds = await getFollowingList(userId);
+      if (followingUsersIds && followingUsersIds.length > 0) {
+        queries.push(Query.equal("userId", followingUsersIds));
+      } else {
+        queries.push(Query.equal('userId', 'nonexistentUser'));
       }
-
+      
+      // Fetch posts from there
     } else if (filter === "Most Liked") {
       queries.push(Query.orderDesc("likesCount"));
     }
 
-    const filteredPosts = await databases.listDocuments(
-      appwriteConfig.databaseId,
-      appwriteConfig.postCollectionId,
-      queries,
-    );
+    if (queries.length > 0) {
+      filteredPosts = await databases.listDocuments(
+        appwriteConfig.databaseId,
+        appwriteConfig.postCollectionId,
+        queries
+      );
+    }
 
     return filteredPosts;
   } catch (error) {

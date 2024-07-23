@@ -84,7 +84,7 @@ const PostDetail = () => {
                 >
                   <Button
                     variant="ghost"
-                    className={`post_details-delete_btn ml-4 ${user.id !== post?.creator.$id && "hidden"}`}
+                    className={`${user.id !== post?.creator.$id ? "hidden" : "post_details-delete_btn ml-4"}`}
                   >
                     <img
                       src="/assets/icons/delete.svg"

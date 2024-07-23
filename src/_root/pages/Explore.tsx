@@ -3,7 +3,8 @@ import Loader from '@/components/shared/Loader';
 import SearchResults from '@/components/shared/SearchResults';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input'
-import { useGetPosts, useSearchPosts } from '@/lib/react-query/queriesMutations';
+import { useUserContext } from '@/context/AuthContext';
+import { useGetFilteredPosts, useGetPosts, useSearchPosts } from '@/lib/react-query/queriesMutations';
 import { useState } from 'react'
 
 export type SearchResultProps = {
@@ -13,11 +14,16 @@ export type SearchResultProps = {
 
 const Explore = () => {
   const { data: posts } = useGetPosts();
+  // const { user } = useUserContext();
 
   const [searchValue, setSearchValue] = useState("");
   const { data: searchedPosts, isFetching: isSearchFetching } = useSearchPosts(searchValue);
 
   const [currentFilter, setCurrentFilter] = useState<"All" | "Following" | "Most Liked">("All");
+
+  // const { data: posts, isPending, isFetching } = useGetFilteredPosts(currentFilter, user.id);
+  // console.log(currentFilter, posts);
+  
 
   if (!posts) {
     return (
