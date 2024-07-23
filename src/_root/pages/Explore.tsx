@@ -3,8 +3,8 @@ import Loader from '@/components/shared/Loader';
 import SearchResults from '@/components/shared/SearchResults';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input'
-import { useUserContext } from '@/context/AuthContext';
-import { useGetFilteredPosts, useGetPosts, useSearchPosts } from '@/lib/react-query/queriesMutations';
+// import { useUserContext } from '@/context/AuthContext';
+import { useGetPosts, useSearchPosts } from '@/lib/react-query/queriesMutations';
 import { useState } from 'react'
 
 export type SearchResultProps = {
