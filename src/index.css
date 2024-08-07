@@ -174,7 +174,7 @@
   }
 
   .profile-inner_container {
-    @apply flex items-center md:mb-8 xl:items-start gap-8 flex-col xl:flex-row relative max-w-5xl w-full;
+    @apply flex items-center md:mb-8 xl:items-start gap-8 flex-col xl:flex-row relative max-w-5xl;
   }
 
   .profile-tab {
@@ -243,6 +243,11 @@
   /* User card */
   .user-card {
     @apply flex-center flex-col gap-4 border border-dark-4 rounded-[20px] px-5 py-8;
+  }
+
+  /* Comments Wrapper */
+  .comments-section_wrapper {
+    @apply bg-dark-2 w-full max-w-5xl rounded-[30px] flex-col flex border border-dark-4 xl:rounded-l-[24px];
   }
 }
 

@@ -1,8 +1,10 @@
-import { useDeleteSavedPost, useGetCurrentUser, useLikePost, useSavePost } from '@/lib/react-query/queriesMutations';
+import { useDeleteSavedPost, useGetCommentsForPost, useGetCurrentUser, useLikePost, useSavePost } from '@/lib/react-query/queriesMutations';
 import { checkIsLiked } from '@/lib/utils';
 import { Models } from 'appwrite';
 import React, { useEffect, useState } from 'react'
 import Loader from './Loader';
+import { MessageCircleMore } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 type PostStatsProps = {
   post?: Models.Document;
@@ -19,6 +21,7 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
   const { mutate: likePost } = useLikePost();
   const { mutate: savePost, isPending: isSaving } = useSavePost();
   const { mutate: deleteSavedPost, isPending: isDeleting } = useDeleteSavedPost();
+  const { data: comments } = useGetCommentsForPost(post?.$id || "");
 
   const { data: currentUser } = useGetCurrentUser();
 
@@ -59,7 +62,7 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
 
   return (
     <div className="flex justify-between items-center z-20">
-      <div className="flex gap-2 mr-5">
+      <div className="flex gap-2 mr-5 items-center">
         <img
           src={checkIsLiked(likes, userId)
             ? "/assets/icons/liked.svg"
@@ -73,6 +76,13 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
         />
         <p className="small-medium base-medium">
           {likes.length}
+        </p>
+
+        <Link to={`/post/${post?.$id}`}>
+          <MessageCircleMore className="ml-2 text-[#877eff]" size={20} />
+        </Link>
+        <p className="small-medium base-medium">
+          {comments?.length}
         </p>
       </div>
 

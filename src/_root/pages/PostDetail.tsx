@@ -1,3 +1,4 @@
+import CommentsSection from "@/components/shared/CommentsSection";
 import CustomAlertDialog from "@/components/shared/CustomAlertDialog";
 import Loader from "@/components/shared/Loader";
 import PostStats from "@/components/shared/PostStats";
@@ -118,6 +119,7 @@ const PostDetail = () => {
           </div>
         </div>
       )}
+      <CommentsSection postId={post ? post.$id : ""}/>
     </div >
   )
 }

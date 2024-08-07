@@ -55,3 +55,9 @@ export type INewUser = {
   username: string;
   password: string;
 };
+
+export type IComment = {
+  postId: string;
+  userId: string,
+  comment: string,
+}

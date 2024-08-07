@@ -133,7 +133,7 @@ const Profile = () => {
       </div>
 
       {currentUser.$id === user.id && (
-        <div className="flex max-w-5xl w-full">
+        <div className="grid grid-cols-2 gap-0 lg:grid-cols-4  max-w-5xl">
           <Link
             to={`/profile/${id}`}
             className={`profile-tab rounded-l-lg ${pathname === `/profile/${id}` && "!bg-dark-3"}`}

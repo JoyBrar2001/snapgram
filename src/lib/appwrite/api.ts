@@ -1,6 +1,6 @@
 import { ID, ImageGravity, Query } from "appwrite";
 
-import { INewPost, INewUser, IUpdatePost, IUpdateUser } from "@/types";
+import { IComment, INewPost, INewUser, IUpdatePost, IUpdateUser } from "@/types";
 import { account, appwriteConfig, avatars, databases, storage } from "./config";
 
 export async function createUserAccount(user: INewUser) {
@@ -439,14 +439,14 @@ export async function getFilteredPosts(filter: string, userId: string) {
       );
 
     } else if (filter === "Following") {
-      
+
       const followingUsersIds = await getFollowingList(userId);
       if (followingUsersIds && followingUsersIds.length > 0) {
         queries.push(Query.equal("userId", followingUsersIds));
       } else {
         queries.push(Query.equal('userId', 'nonexistentUser'));
       }
-      
+
       // Fetch posts from there
     } else if (filter === "Most Liked") {
       queries.push(Query.orderDesc("likesCount"));
@@ -592,6 +592,59 @@ export async function getSavedPosts(userId: string) {
     const savedPosts = await Promise.all(savedPostsPromises);
 
     return savedPosts;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getAllCommentsForPost(postId: string) {
+  try {
+    const response = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.commentCollectionId,
+      [
+        Query.equal('post', postId)
+      ]
+    );
+
+    return response.documents;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function postComment(commentData: IComment) {
+  try {
+    const newComment = await databases.createDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.commentCollectionId,
+      ID.unique(),
+      {
+        post: commentData.postId,
+        user: commentData.userId,
+        comment: commentData.comment,
+      }
+    );
+
+    if (!newComment) {
+      throw Error;
+    }
+    
+    return newComment;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function deleteComment(commentId: string) {
+  try {
+    const response = await databases.deleteDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.commentCollectionId,
+      commentId
+    );
+
+    return response;
   } catch (error) {
     console.log(error);
   }
